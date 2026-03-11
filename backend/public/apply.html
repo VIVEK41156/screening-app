@@ -319,7 +319,7 @@
         let selectedFile = null;
 
         // Load job details
-        fetch(`http://localhost:5000/api/public/jobs/${jobId}`)
+        fetch(`/api/public/jobs/${jobId}`)
             .then(r => r.json())
             .then(job => {
                 document.getElementById('job-title').textContent = job.title || 'Open Position';
@@ -386,7 +386,7 @@
             try {
                 setStep(1, 'Analyzing with Gemini AI...');
                 btn.innerHTML = '<span class="spinner"></span> AI is analyzing...';
-                const res = await fetch(`http://localhost:5000/api/public/apply/${jobId}`, { method: 'POST', body: formData });
+                const res = await fetch(`/api/public/apply/${jobId}`, { method: 'POST', body: formData });
                 const data = await res.json();
                 setStep(3, 'Complete!');
                 if (res.ok) {
