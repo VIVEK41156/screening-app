@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- OpenGraph Social Media Tags (Dynamically injected by backend) -->
+    <meta property="og:title" content="__OG_TITLE__" />
+    <meta property="og:description" content="__OG_DESC__" />
+    <meta property="og:image" content="__OG_IMAGE__" />
+    <meta property="og:type" content="website" />
+
+    <title>Apply for Job | HR Smart AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f1a, #1a1a2e, #0f0f1a);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            max-width: 540px;
+            width: 100%;
+            padding: 2.5rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #4B3C8C, #3A2E6F);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .logo h2 {
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .job-banner {
+            background: rgba(75, 60, 140, 0.25);
+            border: 1px solid rgba(75, 60, 140, 0.4);
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .job-banner h1 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .job-meta {
+            color: #C9C8E8;
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .meta-tag {
+            background: rgba(201, 200, 232, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.75rem;
+        }
+
+        .skill-tag {
+            background: rgba(75, 60, 140, 0.4);
+            border: 1px solid rgba(75, 60, 140, 0.5);
+            color: #C9C8E8;
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+        }
+
+        label {
+            display: block;
+            color: #C9C8E8;
+            font-size: 0.8rem;
+            margin-bottom: 0.4rem;
+            margin-top: 1rem;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 0.875rem 1rem;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #4B3C8C;
+            box-shadow: 0 0 0 3px rgba(75, 60, 140, 0.3);
+        }
+
+        .drop-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag {
+            border-color: #4B3C8C;
+            background: rgba(75, 60, 140, 0.1);
+        }
+
+        .drop-zone .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .drop-zone h3 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .drop-zone p {
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        .drop-zone.has-file {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.07);
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4B3C8C, #3A2E6F);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .success {
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .steps {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .step {
+            flex: 1;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.4s;
+        }
+
+        .step.active {
+            background: #4B3C8C;
+        }
+
+        .step.done {
+            background: #22c55e;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" id="app">
+        <div class="logo">
+            <img src="https://evalright.us/wp-content/uploads/2024/08/EvalRight-PNG-AI-2048x853.png" alt="EvalRight"
+                style="height:36px;object-fit:contain;filter:brightness(0) invert(1)" />
+        </div>
+        <div id="job-banner" class="job-banner">
+            <h1 id="job-title">Loading Job...</h1>
+            <div class="job-meta" id="job-meta"></div>
+            <div class="skills-list" id="job-skills"></div>
+        </div>
+
+        <div id="form-section">
+            <label>Your Full Name *</label>
+            <input type="text" id="name" placeholder="e.g. Vivek Kumar" />
+            <label>Your Email Address *</label>
+            <input type="email" id="email" placeholder="e.g. vivek@email.com" />
+            <label>Upload Your Resume *</label>
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="fileInput" hidden accept=".pdf,.doc,.docx" />
+                <div class="icon" id="dropIcon">📄</div>
+                <h3 id="dropText">Click to upload or drag & drop</h3>
+                <p>PDF, DOC, DOCX supported · Max 5MB</p>
+            </div>
+            <div id="error-box" class="alert error" style="display:none"></div>
+            <div class="steps">
+                <div class="step" id="s1"></div>
+                <div class="step" id="s2"></div>
+                <div class="step" id="s3"></div>
+                <div class="step" id="s4"></div>
+            </div>
+            <p id="step-label" style="color:#9ca3af;font-size:0.75rem;margin-top:0.5rem;text-align:center"></p>
+            <button class="btn" id="submitBtn" onclick="submitApplication()">🚀 Submit Application</button>
+        </div>
+
+        <div id="success-section" class="alert success" style="display:none">
+            <div style="font-size:3rem;margin-bottom:0.5rem">🎉</div>
+            <h3>Application Submitted!</h3>
+            <p>Our AI has analyzed your resume. The HR team will review your profile and reach out to you via email.</p>
+            <p style="margin-top:0.75rem;font-size:0.8rem;opacity:0.7">Powered by Google Gemini AI · HR Smart AI</p>
+        </div>
+    </div>
+
+    <script>
+        const jobId = window.location.pathname.split('/').pop();
+        let selectedFile = null;
+
+        // Load job details
+        fetch(`http://localhost:5000/api/public/jobs/${jobId}`)
+            .then(r => r.json())
+            .then(job => {
+                document.getElementById('job-title').textContent = job.title || 'Open Position';
+                document.getElementById('job-meta').innerHTML = `
+          <span class="meta-tag">📍 ${job.location || 'Remote'}</span>
+          <span class="meta-tag">⏱ ${job.experience}+ years exp</span>
+          ${job.salary_range ? `<span class="meta-tag">💰 ${job.salary_range}</span>` : ''}
+        `;
+                const skills = (job.skills || '').split(',').map(s => s.trim()).filter(Boolean);
+                document.getElementById('job-skills').innerHTML = skills.map(s => `<span class="skill-tag">${s}</span>`).join('');
+                document.title = `Apply for ${job.title} | HR Smart AI`;
+            })
+            .catch(() => { document.getElementById('job-title').textContent = 'Open Position'; });
+
+        // File selection
+        const dropZone = document.getElementById('dropZone');
+        dropZone.onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').addEventListener('change', e => setFile(e.target.files[0]));
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+        dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); setFile(e.dataTransfer.files[0]); });
+
+        function setFile(file) {
+            if (!file) return;
+            const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            const validExts = ['.pdf', '.doc', '.docx'];
+            if (!validExts.includes(ext)) {
+                return showError('Strict Validation: Only .pdf, .doc, and .docx files are accepted.');
+            }
+            document.getElementById('error-box').style.display = 'none';
+            selectedFile = file;
+            dropZone.classList.add('has-file');
+            document.getElementById('dropIcon').textContent = '✅';
+            document.getElementById('dropText').textContent = file.name;
+        }
+
+        function setStep(n, label) {
+            ['s1', 's2', 's3', 's4'].forEach((id, i) => {
+                document.getElementById(id).className = 'step' + (i < n ? ' done' : i === n ? ' active' : '');
+            });
+            document.getElementById('step-label').textContent = label;
+        }
+
+        async function submitApplication() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const errBox = document.getElementById('error-box');
+            errBox.style.display = 'none';
+
+            if (!name) return showError('Please enter your full name.');
+            if (!email) return showError('Please enter your email address.');
+            if (!selectedFile) return showError('Please upload your resume (PDF/DOC).');
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Uploading...';
+            setStep(0, 'Uploading resume...');
+
+            const formData = new FormData();
+            formData.append('resume', selectedFile);
+            formData.append('name', name);
+            formData.append('email', email);
+
+            try {
+                setStep(1, 'Analyzing with Gemini AI...');
+                btn.innerHTML = '<span class="spinner"></span> AI is analyzing...';
+                const res = await fetch(`http://localhost:5000/api/public/apply/${jobId}`, { method: 'POST', body: formData });
+                const data = await res.json();
+                setStep(3, 'Complete!');
+                if (res.ok) {
+                    document.getElementById('form-section').style.display = 'none';
+                    document.getElementById('success-section').style.display = 'block';
+                } else {
+                    showError(data.error || 'Submission failed. Please try again.');
+                    btn.disabled = false; btn.innerHTML = '🚀 Submit Application';
+                }
+            } catch (e) {
+                showError('Network error. Please check your connection and try again.');
+                btn.disabled = false; btn.innerHTML = '🚀 Submit Application';
+                setStep(-1, '');
+            }
+        }
+
+        function showError(msg) {
+            const b = document.getElementById('error-box');
+            b.textContent = '⚠️ ' + msg;
+            b.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

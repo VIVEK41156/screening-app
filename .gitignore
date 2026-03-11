@@ -1,0 +1,46 @@
+# ── Dependencies ──
+node_modules/
+**/node_modules/
+
+# ── Environment secrets (NEVER commit) ──
+.env
+**/.env
+.env.local
+.env.production
+
+# ── Build Output ──
+frontend/dist/
+
+# ── Logs ──
+*.log
+backend/log.txt
+backend/server.log
+backend/server_err.log
+backend/server_error.log
+frontend/frontend.log
+frontend/vite_err.log
+frontend/vite_out.log
+
+# ── Uploaded Files (runtime data) ──
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# ── Debug / One-off scripts ──
+backend/debug_ai.js
+backend/debug_run.js
+backend/find_gupta.js
+backend/run_test_match.js
+backend/test_db.js
+backend/test_match.py
+backend/update_status.js
+backend/ai_insights.json
+backend/=
+
+# ── OS Files ──
+.DS_Store
+Thumbs.db
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
