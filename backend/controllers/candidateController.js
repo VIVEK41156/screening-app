@@ -326,6 +326,10 @@ exports.getPublicJob = async (req, res) => {
 exports.publicApply = async (req, res) => {
   let filePath = null;
   try {
+    // Ensure the uploads directory exists (Render ephemeral FS)
+    if (!fs.existsSync('uploads')) {
+      fs.mkdirSync('uploads', { recursive: true });
+    }
     if (!req.file) return res.status(400).json({ error: 'Please upload a resume file.' });
     filePath = req.file.path;
 
@@ -408,7 +412,7 @@ exports.publicApply = async (req, res) => {
   } catch (err) {
     console.error('publicApply error:', err);
     if (filePath) try { fs.unlinkSync(filePath); } catch (_) { }
-    res.status(500).json({ error: 'Application failed. Please try again.' });
+    res.status(500).json({ error: 'Application failed. Please try again.', details: err.message });
   }
 };
 
