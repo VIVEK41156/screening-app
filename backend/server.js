@@ -86,8 +86,8 @@ app.use((req, res, next) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`✅ Backend running on http://localhost:${PORT}`);
+    console.log(`✅ Backend running on port ${PORT}`);
     console.log(`📁 Serving apply.html from: ${path.join(__dirname, 'public', 'apply.html')}`);
 });
