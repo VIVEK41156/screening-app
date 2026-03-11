@@ -29,7 +29,7 @@ const Header = ({
     user, onLogout, setActiveView, candidates = [],
     openTabs = [], activeView, onTabClick, onTabClose,
 }) => {
-    const newCount = candidates.filter(c => c.status === 'New').length;
+    const newCount = candidates.filter(c => c.status === 'New' || c.status === 'Review').length;
 
     return (
         <header style={{

@@ -52,7 +52,7 @@ const NewProfiles = ({ candidates, token, onScreenComplete }) => {
     const [selectedIds, setSelectedIds] = useState([]);
 
     const newCandidates = candidates.filter(c =>
-        c.status === 'New' &&
+        (c.status === 'New' || c.status === 'Review') &&
         (c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             c.email.toLowerCase().includes(searchTerm.toLowerCase()))
     );
