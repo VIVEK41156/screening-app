@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
     res.json({ token, user: { id: user.id, email: user.email, role: user.role } });
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ error: 'Login failed. Server error.', details: err.message || String(err) });
+    res.status(500).json({ error: 'Login failed. Server error.' });
   }
 };
 
@@ -412,7 +412,7 @@ exports.publicApply = async (req, res) => {
   } catch (err) {
     console.error('publicApply error:', err);
     if (filePath) try { fs.unlinkSync(filePath); } catch (_) { }
-    res.status(500).json({ error: 'Application failed. Please try again.', details: err.message });
+    res.status(500).json({ error: 'Application failed. Please try again.' });
   }
 };
 
