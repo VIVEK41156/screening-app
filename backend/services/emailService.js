@@ -12,7 +12,8 @@ const COMPANY = process.env.COMPANY_NAME || 'HR Smart AI';
 const FROM = process.env.EMAIL_USER;
 
 exports.sendInterviewTestEmail = async ({ candidateName, candidateEmail, jobTitle, candidateId, testPassword }) => {
-  const testUrl = `http://localhost:5000/test/${candidateId}`; // Backend route serving test.html
+  const BACKEND_URL = process.env.BACKEND_URL || 'https://screening-backend.onrender.com';
+  const testUrl = `${BACKEND_URL}/test/${candidateId}`;
 
   const html = `
     <!DOCTYPE html>
