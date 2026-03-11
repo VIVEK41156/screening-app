@@ -74,7 +74,7 @@ const CreateJob = ({ token }) => {
     finally { setLoading(false); }
   };
 
-  const getApplyLink = (id) => `http://localhost:5000/apply/${id}`;
+  const getApplyLink = (id) => `https://screening-backend.onrender.com/apply/${id}`;
 
   const copyLink = (id) => {
     navigator.clipboard.writeText(getApplyLink(id));
@@ -378,7 +378,7 @@ const CreateJob = ({ token }) => {
               Right-click the image &amp; <b style={{ color: '#a78bfa' }}>Copy Image</b>, then paste it into your {posterJob.network} post!
             </p>
             <div style={{ padding: '0.5rem', background: 'rgba(0,0,0,0.3)', borderRadius: '14px', marginBottom: '1.25rem', border: '1px solid rgba(139,92,246,0.2)' }}>
-              <img src={`http://localhost:5000/api/public/jobs/${posterJob.job.id}/poster?t=${Date.now()}`} alt="AI Poster" style={{ width: '100%', height: 'auto', aspectRatio: '1/1', borderRadius: '10px', objectFit: 'cover' }} crossOrigin="anonymous" />
+              <img src={`https://screening-backend.onrender.com/api/public/jobs/${posterJob.job.id}/poster?t=${Date.now()}`} alt="AI Poster" style={{ width: '100%', height: 'auto', aspectRatio: '1/1', borderRadius: '10px', objectFit: 'cover' }} crossOrigin="anonymous" />
             </div>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button onClick={() => setPosterJob(null)} style={{ flex: 1, padding: '0.8rem', background: 'rgba(255,255,255,0.05)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', cursor: 'pointer', fontWeight: 600, fontSize: '0.88rem' }}>

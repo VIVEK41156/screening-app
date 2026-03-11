@@ -252,7 +252,7 @@ const TestVideoRecords = ({ candidates }) => {
                         >
                             <video
                                 className="re-invert"
-                                src={`http://localhost:5000${selectedVideoUrl}`}
+                                src={`https://screening-backend.onrender.com${selectedVideoUrl}`}
                                 controls autoPlay
                                 style={{ width: '100%', display: 'block', maxHeight: 380, objectFit: 'contain', background: '#000', borderRadius: '16px' }}
                             >

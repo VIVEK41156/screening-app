@@ -1,0 +1,24 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "https://screening-backend.onrender.com/api/$1"
+        },
+        {
+            "source": "/apply/(.*)",
+            "destination": "https://screening-backend.onrender.com/apply/$1"
+        },
+        {
+            "source": "/test/(.*)",
+            "destination": "https://screening-backend.onrender.com/test/$1"
+        },
+        {
+            "source": "/interview/(.*)",
+            "destination": "https://screening-backend.onrender.com/interview/$1"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
+}

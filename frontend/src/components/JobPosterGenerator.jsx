@@ -155,7 +155,7 @@ const JobPosterGenerator = ({ job, onClose }) => {
         ctx.fillText('APPLY NOW', W / 2, applyY);
 
         // Apply link box
-        const applyLink = `localhost:5000/apply/${job.id}`;
+        const applyLink = `screening-backend.onrender.com/apply/${job.id}`;
         ctx.save();
         ctx.globalAlpha = 0.15;
         ctx.fillStyle = '#C9C8E8';
@@ -206,12 +206,12 @@ const JobPosterGenerator = ({ job, onClose }) => {
     };
 
     const shareToLinkedIn = () => {
-        const url = encodeURIComponent(`http://localhost:5000/apply/${job.id}`);
+        const url = encodeURIComponent(`https://screening-backend.onrender.com/apply/${job.id}`);
         window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
     };
 
     const shareToFacebook = () => {
-        const url = encodeURIComponent(`http://localhost:5000/apply/${job.id}`);
+        const url = encodeURIComponent(`https://screening-backend.onrender.com/apply/${job.id}`);
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
     };
 

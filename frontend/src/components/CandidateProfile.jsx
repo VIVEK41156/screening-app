@@ -408,10 +408,10 @@ const CandidateProfile = ({ candidate, onClose, token }) => {
 
                 <div style={{ background: 'rgba(0,0,0,0.3)', padding: '0.9rem 1rem', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', border: '1px solid rgba(139,92,246,0.12)' }}>
                   <code style={{ fontSize: '0.8rem', color: '#a78bfa', wordBreak: 'break-all' }}>
-                    {`http://localhost:5000/test/${candidate.id}`}
+                    {`https://screening-backend.onrender.com/test/${candidate.id}`}
                   </code>
                   <button
-                    onClick={() => { navigator.clipboard.writeText(`http://localhost:5000/test/${candidate.id}`); alert('Exam link copied!'); }}
+                    onClick={() => { navigator.clipboard.writeText(`https://screening-backend.onrender.com/test/${candidate.id}`); alert('Exam link copied!'); }}
                     style={{ padding: '0.45rem 1rem', background: 'linear-gradient(135deg,#7c3aed,#4f46e5)', border: 'none', borderRadius: '8px', color: '#fff', fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer', whiteSpace: 'nowrap', boxShadow: '0 0 14px rgba(124,58,237,0.4)' }}
                   >Copy Link</button>
                 </div>
