@@ -881,18 +881,26 @@ exports.getScreeningTest = async (req, res) => {
 
 exports.submitScreeningTest = async (req, res) => {
   try {
+    console.log("=== SUBMIT TEST STARTED ===");
     const { candidateId } = req.params;
+    console.log("Candidate ID:", candidateId);
+    
     let answers = [];
     if (req.body.answers) {
       try {
         answers = JSON.parse(req.body.answers);
+        console.log("Parsed answers array length:", answers.length);
       } catch (e) {
         answers = req.body.answers; // Fallback if already an array
+        console.log("Fallback answers:", answers);
       }
+    } else {
+      console.log("No answers found in body!");
     }
 
     let videoUrl = null;
     if (req.file) {
+      console.log("File received:", req.file.filename);
       // The file was saved to public/videos/ by multer
       // We will save the relative path to be served statically
       videoUrl = `/videos/${req.file.filename}.webm`;
@@ -902,18 +910,31 @@ exports.submitScreeningTest = async (req, res) => {
       const newPath = `${req.file.path}.webm`;
       fs.renameSync(oldPath, newPath);
       console.log('📹 Saved test video to:', newPath);
+    } else {
+      console.log("No video file received in req.file!");
     }
 
+    console.log("Querying db for Candidate test_data...");
     const candidateRes = await db.query('SELECT test_data, test_completed FROM candidates WHERE id = $1', [candidateId]);
-    if (candidateRes.rows.length === 0) return res.status(404).json({ error: 'Candidate not found' });
+    if (candidateRes.rows.length === 0) {
+      console.log("Candidate not found:", candidateId);
+      return res.status(404).json({ error: 'Candidate not found' });
+    }
 
     const candidate = candidateRes.rows[0];
-    if (candidate.test_completed) return res.status(400).json({ error: 'Test already submitted' });
+    if (candidate.test_completed) {
+      console.log("Test already submitted");
+      return res.status(400).json({ error: 'Test already submitted' });
+    }
 
     const questions = typeof candidate.test_data === 'string' ? JSON.parse(candidate.test_data) : candidate.test_data;
-    if (!questions || questions.length === 0) return res.status(400).json({ error: 'No test found to grade' });
+    if (!questions || questions.length === 0) {
+       console.log("No test found to grade");
+       return res.status(400).json({ error: 'No test found to grade' });
+    }
 
     // Grade Test
+    console.log("Grading test. Questions count:", questions.length, "Answers count:", answers.length);
     let correctCount = 0;
     if (Array.isArray(answers)) {
       questions.forEach((q, index) => {
@@ -925,14 +946,17 @@ exports.submitScreeningTest = async (req, res) => {
 
     // Score out of 100
     const finalScore = Math.round((correctCount / questions.length) * 100);
+    console.log(`Final score calculated: ${finalScore} (${correctCount}/${questions.length})`);
 
     // Save final grade and video url
+    console.log("Updating DB with score and test_completed...");
     await db.query('UPDATE candidates SET test_score = $1, test_completed = true, video_url = $2 WHERE id = $3', [finalScore, videoUrl, candidateId]);
+    console.log("DB update successful");
 
     res.json({ success: true, score: finalScore });
   } catch (err) {
-    console.error('submitScreeningTest error:', err);
-    res.status(500).json({ error: 'Failed to submit test' });
+    console.error('submitScreeningTest FULL error trace:', err);
+    res.status(500).json({ error: 'Failed to submit test', details: err.message });
   }
 };
 
