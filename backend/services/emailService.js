@@ -1,22 +1,11 @@
-const nodemailer = require('nodemailer');
-const dns = require('dns');
+const { Resend } = require('resend');
 
-// Force IPv4 resolution to prevent Render from attempting to connect to Gmail via blocked IPv6 routes
-dns.setDefaultResultOrder('ipv4first');
+// Initialize Resend with API Key from environment variable
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  requireTLS: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
+// Use a verified domain or the default testing domain provided by Resend
+const FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev'; 
 const COMPANY = process.env.COMPANY_NAME || 'HR Smart AI';
-const FROM = process.env.EMAIL_USER;
 
 exports.sendInterviewTestEmail = async ({ candidateName, candidateEmail, jobTitle, candidateId, testPassword }) => {
   const BACKEND_URL = process.env.BACKEND_URL || 'https://screening-backend.onrender.com';
@@ -83,12 +72,19 @@ exports.sendInterviewTestEmail = async ({ candidateName, candidateEmail, jobTitl
     </html>
   `;
 
-  return transporter.sendMail({
-    from: `"${COMPANY} Recruitment" <${FROM}>`,
-    to: candidateEmail,
-    subject: `Action Required: AI Screening Test for ${jobTitle} at ${COMPANY}`,
-    html,
-  });
+  try {
+    const { data, error } = await resend.emails.send({
+      from: `"${COMPANY} Recruitment" <${FROM}>`,
+      to: candidateEmail,
+      subject: `Action Required: AI Screening Test for ${jobTitle} at ${COMPANY}`,
+      html,
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw err;
+  }
 };
 
 exports.sendOfferLetter = async ({ candidateName, candidateEmail, jobTitle, skills }) => {
@@ -110,7 +106,6 @@ exports.sendOfferLetter = async ({ candidateName, candidateEmail, jobTitle, skil
         .details table { width: 100%; border-collapse: collapse; }
         .details td { padding: 0.5rem 0; color: #374151; font-size: 0.9rem; }
         .details td:first-child { font-weight: 600; color: #4B3C8C; width: 40%; }
-        .btn { display: inline-block; margin-top: 1.5rem; padding: 0.875rem 2rem; background: linear-gradient(135deg, #4B3C8C, #3A2E6F); color: white !important; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 1rem; }
         .footer { text-align: center; color: #9ca3af; font-size: 0.78rem; margin-top: 1.5rem; }
         .signature { border-top: 1px solid #e5e7eb; margin-top: 1.5rem; padding-top: 1.25rem; color: #6b7280; font-size: 0.875rem; }
       </style>
@@ -146,12 +141,19 @@ exports.sendOfferLetter = async ({ candidateName, candidateEmail, jobTitle, skil
     </html>
   `;
 
-  return transporter.sendMail({
-    from: `"${COMPANY} Recruitment" <${FROM}>`,
-    to: candidateEmail,
-    subject: `🎉 Congratulations! You've been selected — ${jobTitle} at ${COMPANY}`,
-    html,
-  });
+  try {
+    const { data, error } = await resend.emails.send({
+      from: `"${COMPANY} Recruitment" <${FROM}>`,
+      to: candidateEmail,
+      subject: `🎉 Congratulations! You've been selected — ${jobTitle} at ${COMPANY}`,
+      html,
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw err;
+  }
 };
 
 exports.sendRejectionEmail = async ({ candidateName, candidateEmail, jobTitle }) => {
@@ -196,12 +198,19 @@ exports.sendRejectionEmail = async ({ candidateName, candidateEmail, jobTitle })
     </html>
   `;
 
-  return transporter.sendMail({
-    from: `"${COMPANY} Recruitment" <${FROM}>`,
-    to: candidateEmail,
-    subject: `Your Application Update — ${jobTitle} at ${COMPANY}`,
-    html,
-  });
+  try {
+    const { data, error } = await resend.emails.send({
+      from: `"${COMPANY} Recruitment" <${FROM}>`,
+      to: candidateEmail,
+      subject: `Your Application Update — ${jobTitle} at ${COMPANY}`,
+      html,
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw err;
+  }
 };
 
 // ─── INTERVIEW INVITE (HR sends after test pass) ───
@@ -275,12 +284,19 @@ exports.sendInterviewInviteEmail = async ({ candidateName, candidateEmail, jobTi
     </html>
   `;
 
-  return transporter.sendMail({
-    from: `"${COMPANY} Recruitment" <${FROM}>`,
-    to: candidateEmail,
-    subject: `🎉 Interview Invitation — ${jobTitle} at ${COMPANY}`,
-    html,
-  });
+  try {
+    const { data, error } = await resend.emails.send({
+      from: `"${COMPANY} Recruitment" <${FROM}>`,
+      to: candidateEmail,
+      subject: `🎉 Interview Invitation — ${jobTitle} at ${COMPANY}`,
+      html,
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw err;
+  }
 };
 
 // ─── BETTER LUCK NEXT TIME (HR sends after test fail) ───
@@ -347,11 +363,17 @@ exports.sendBetterLuckEmail = async ({ candidateName, candidateEmail, jobTitle, 
     </html>
   `;
 
-  return transporter.sendMail({
-    from: `"${COMPANY} Recruitment" <${FROM}>`,
-    to: candidateEmail,
-    subject: `Assessment Update — ${jobTitle} at ${COMPANY}`,
-    html,
-  });
+  try {
+    const { data, error } = await resend.emails.send({
+      from: `"${COMPANY} Recruitment" <${FROM}>`,
+      to: candidateEmail,
+      subject: `Assessment Update — ${jobTitle} at ${COMPANY}`,
+      html,
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error sending email:', err);
+    throw err;
+  }
 };
-
