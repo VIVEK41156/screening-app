@@ -71,19 +71,13 @@ app.get('/interview/:candidateId', (req, res) => {
 // Static files from /public (for apply.html assets)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve the compiled React Frontend
-const frontendDist = path.join(__dirname, '../frontend/dist');
-app.use(express.static(frontendDist));
-
+// We do NOT serve the React frontend from the backend anymore since it's on Vercel
 // API Routes
 app.use('/api', require('./routes/candidateRoutes'));
 
-// Catch-all route for the React SPA (except for API and Apply routes)
+// Catch-all route to prevent ENOENT errors
 app.use((req, res, next) => {
-    if (req.path.startsWith('/api/') || req.path.startsWith('/apply/')) {
-        return next();
-    }
-    res.sendFile(path.join(frontendDist, 'index.html'));
+    res.status(404).send("API Endpoint Not Found. Frontend is hosted separately.");
 });
 
 const PORT = process.env.PORT || 5000;

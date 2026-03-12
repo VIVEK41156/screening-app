@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
+    "postinstall": "pip install scikit-learn numpy || pip3 install scikit-learn numpy || echo 'Failed to install python deps, continuing...'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

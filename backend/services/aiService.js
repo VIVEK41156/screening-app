@@ -6,6 +6,24 @@ const path = require('path');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
+// Rate-limiting retry wrapper for Gemini
+async function generateContentWithRetry(promptOrArray, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await model.generateContent(promptOrArray);
+    } catch (err) {
+      if (err.message && err.message.includes('429 Too Many Requests') && i < maxRetries - 1) {
+        // Exponential backoff: 3s, 6s, 12s...
+        const delay = Math.pow(2, i) * 3000;
+        console.warn(`[Gemini Rate Limit] 429 hit. Retrying in ${delay / 1000}s... (Attempt ${i + 1}/${maxRetries})`);
+        await new Promise(res => setTimeout(res, delay));
+      } else {
+        throw err;
+      }
+    }
+  }
+}
+
 // Helper to run Python Scorer
 const runPythonScorer = (resumeText, jobSkills, jobDescription) => {
   return new Promise((resolve, reject) => {
@@ -58,7 +76,7 @@ exports.analyzeResume = async (resumeText, jobDescription, jobSkills = '', jobTi
       const mimeType = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
       const base64Data = arr[1];
 
-      const ocrResult = await model.generateContent([
+      const ocrResult = await generateContentWithRetry([
         "Please extract all readable text from this document image/PDF exactly. Return ONLY the extracted text.",
         { inlineData: { data: base64Data, mimeType: mimeType } }
       ]);
@@ -100,7 +118,7 @@ exports.analyzeResume = async (resumeText, jobDescription, jobSkills = '', jobTi
       ${finalResumeText}
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(prompt);
     const responseText = result.response.text().trim();
 
     // Clean up potential markdown code blocks returned by Gemini
@@ -146,7 +164,7 @@ exports.generateInterviewQuestions = async (candidateName, candidateSkills, jobD
       ["Question 1", "Question 2", "Question 3", "Question 4"]
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(prompt);
     let responseText = result.response.text().trim();
     responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
 
@@ -164,7 +182,7 @@ exports.generatePosterPrompt = async (job) => {
       Generate a short, highly stylized image generation prompt (max 30 words) for a professional corporate hiring poster for a '${job.title}' role. 
       The image should NOT contain any text. It should feature a high-tech, abstract glassmorphism style, dark purple (#4B3C8C) and neon accents, suitable for modern recruiting.
     `;
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(prompt);
     return result.response.text().trim();
   } catch (err) {
     console.error("Error generating poster prompt:", err);
@@ -203,7 +221,7 @@ exports.generateScreeningTest = async (candidateName, candidateSkills, jobDescri
       ]
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(prompt);
     let responseText = result.response.text().trim();
     responseText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
 
@@ -265,7 +283,7 @@ exports.processInterviewTurn = async (candidate, jobTitle, questionNumber, answe
         Keep it highly conversational, professional, and concise (under 30 words).
         Do not output any prefix like "EVA:". Just the exact words you will speak to the candidate.
       `;
-      const result = await model.generateContent(prompt);
+      const result = await generateContentWithRetry(prompt);
       const nextQuestion = result.response.text().trim();
       return { isComplete: false, nextQuestion };
     } else {
@@ -278,7 +296,7 @@ exports.processInterviewTurn = async (candidate, jobTitle, questionNumber, answe
         Acknowledge their answer briefly, thank them for their time, and officially conclude the interview.
         Keep it professional, encouraging, and under 30 words.
       `;
-      const result = await model.generateContent(prompt);
+      const result = await generateContentWithRetry(prompt);
       const closing = result.response.text().trim();
       return { isComplete: true, nextQuestion: closing };
     }
@@ -307,7 +325,7 @@ exports.evaluateInterview = async (candidate, jobTitle, transcript) => {
         "recommendation": "Hire" | "Consider" | "Reject"
       }
     `;
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(prompt);
     let text = result.response.text().trim();
     text = text.replace(/```json/g, '').replace(/```/g, '').trim();
     return JSON.parse(text);
