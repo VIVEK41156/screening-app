@@ -900,16 +900,17 @@ exports.submitScreeningTest = async (req, res) => {
 
     let videoUrl = null;
     if (req.file) {
-      console.log("File received:", req.file.filename);
-      // The file was saved to public/videos/ by multer
-      // We will save the relative path to be served statically
-      videoUrl = `/videos/${req.file.filename}.webm`;
-
-      // Rename file to have .webm extension for easy serving
-      const oldPath = req.file.path;
-      const newPath = `${req.file.path}.webm`;
-      fs.renameSync(oldPath, newPath);
-      console.log('📹 Saved test video to:', newPath);
+      console.log("File received:", req.file.filename, "dest:", req.file.destination);
+      try {
+        const oldPath = req.file.path;
+        const newPath = oldPath + '.webm';
+        require('fs').renameSync(oldPath, newPath);
+        videoUrl = `/videos/${req.file.filename}.webm`;
+        console.log('📹 Saved test video to:', newPath);
+      } catch (fileErr) {
+        console.error('⚠️ Could not rename video file (non-fatal):', fileErr.message);
+        // Still proceed with submission - video is optional
+      }
     } else {
       console.log("No video file received in req.file!");
     }

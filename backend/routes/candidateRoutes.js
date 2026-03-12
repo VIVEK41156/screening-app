@@ -55,7 +55,7 @@ if (!fs.existsSync(videoDir)) {
 }
 
 const videoUpload = multer({
-    dest: 'public/videos/',
+    dest: path.join(__dirname, '../public/videos'),
     limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for video
 });
 

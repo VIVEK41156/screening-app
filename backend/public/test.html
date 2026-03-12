@@ -1311,6 +1311,13 @@
                 });
                 const data = await res.json();
 
+                if (!res.ok) {
+                    console.error("Submission failed:", data);
+                    document.getElementById('result-title').textContent = "Submission Failed";
+                    document.getElementById('result-subtitle').textContent = `Error: ${data.error || 'Unknown server error'}. Please refresh and try again, or contact support.`;
+                    return;
+                }
+
                 showResult();
             } catch (e) {
                 console.error("Submission failed", e);
